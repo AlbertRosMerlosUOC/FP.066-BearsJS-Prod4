@@ -1,0 +1,43 @@
+.bg-light {
+    background-color: #f6f8fa;
+}
+
+.rounded {
+    border-radius: 6px;
+}
+
+.btn-outline-secondary {
+    color: #6a737d;
+    border-color: #d1d5da;
+}
+
+.btn-outline-secondary:hover {
+    color: #24292e;
+    background-color: #fafbfc;
+    border-color: #d1d5da;
+}
+
+.icon {
+    display: inline-block;
+    vertical-align: text-top;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
+.text-copy {
+    width: 600px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: small;
+    line-height: 0%;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    margin-left: 25px; 
+}
+
+.text-copy > button {
+    height: 32px !important;
+}
+  

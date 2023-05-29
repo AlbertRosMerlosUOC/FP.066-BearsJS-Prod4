@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BearsJS - Producto 3</title>
+  <link rel="stylesheet" href="../../css/normalize.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/base.css">
+</head>
+
+<body>
+  <div class="section">
+    <nav class="navbar navbar-expand-sm bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../../index.html">BearsJS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBar" aria-controls="navBar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navBar">
+          <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item disabled" href="#">Producto 1</a></li>
+                <li><a class="dropdown-item disabled" href="#">Producto 2</a></li>
+                <li><a class="dropdown-item active" href="./producto3.html">Producto 3</a></li>
+                <li><a class="dropdown-item disabled" href="#">Producto 4</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../equipo/equipo.html">Equipo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <nav aria-label="breadcrumb" style="margin-left:15px;">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="./producto3.html"><b>Panel principal</b></a></li>
+        <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-current"></li>
+      </ol>
+    </nav>
+    <!-- Botón que abre el modal -->
+    <button id="btn-add-0" target-day="0" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask" style="margin: 10px;">Nueva tarea</button>
+
+    <!-- Contenedor de las tareas creadas -->
+    <div id="unassignedTasks" class="margin-10 radius-10">
+      <!-- Las nuevas tareas se agregarán aquí -->
+    </div>
+    
+    <div id="days" style="background-color: #e1e1e1;" class="margin-10 radius-10">
+      <div id="day1" style="background-color: #f2b2c0;" class="dayContainer margin-5 radius-10">
+        <p>Lunes</p>
+        <div class="btn-add-task">
+            <button id="btn-add-1" target-day="1" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day2" style="background-color: #b3e2c7;" class="dayContainer margin-5 radius-10">
+        <p>Martes</p>
+        <div class="btn-add-task">
+            <button id="btn-add-2" target-day="2" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day3" style="background-color: #fdebd0;" class="dayContainer margin-5 radius-10">
+        <p>Miércoles</p>
+        <div class="btn-add-task">
+            <button id="btn-add-3" target-day="3" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day4" style="background-color: #d9c7c1;" class="dayContainer margin-5 radius-10">
+        <p>Jueves</p>
+        <div class="btn-add-task">
+          <button id="btn-add-4" target-day="4" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day5" style="background-color: #c3aed6;" class="dayContainer margin-5 radius-10">
+        <p>Viernes</p>
+        <div class="btn-add-task">
+          <button id="btn-add-5" target-day="5" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day6" style="background-color: #b4c5e4;" class="dayContainer margin-5 radius-10">
+        <p>Sábado</p>
+        <div class="btn-add-task">
+          <button id="btn-add-6" target-day="6" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+      <div id="day7" style="background-color: #ffe0b2;" class="dayContainer margin-5 radius-10">
+        <p>Domingo</p>
+        <div class="btn-add-task">
+          <button id="btn-add-7" target-day="7" type="button" class="btn btn-primary button-add" data-bs-toggle="modal" data-bs-target="#formTask"><i class="fa fa-plus fa-lg"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal que contiene el formulario -->
+  <div class="modal fade" id="formTask" tabindex="1" aria-labelledby="formTaskLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formTaskLabel">Formulario de tareas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="myForm">
+            <input type="hidden" id="target-card" value=""/>
+            <div class="form-group">
+              <label class="form-label" for="nameInput">Nombre de la tarea&nbsp;<span class="required" title="Campo requerido">*</span></label>
+              <input class="form-control" type="text" placeholder="Nombre de la tarea" id="nameInput" maxlength="25" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="descInput">Descripción&nbsp;<span class="required" title="Campo requerido">*</span></label>
+              <textarea class="form-control" placeholder="Descripción" rows="3" id="descInput" required></textarea>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col">
+                  <label class="form-label" for="iniInput">Hora de inicio</label>
+                  <input class="form-control" type="time" placeholder="Hora de inicio" id="iniInput" maxlength="5">
+                </div>
+                <div class="col">
+                  <label class="form-label" for="endInput">Hora de final</label>
+                  <input class="form-control" type="time" placeholder="Hora de final" id="endInput" maxlength="5">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="taskType">Tipo de tarea&nbsp;<span class="required" title="Campo requerido">*</span></label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="taskType" id="typeIInput" value="I" required>
+                <label class="form-check-label" for="typeIInput">Incidencia</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="taskType" id="typePInput" value="P" required>
+                <label class="form-check-label" for="typePInput">Petición</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="userInput">Responsable</label>
+              <select class="form-control" id="userInput">
+                <option value=""></option>
+                <option value="M">Marc</option>
+                <option value="F">Fernando</option>
+                <option value="A">Albert</option>
+                <option value="S">Silvia</option>
+                <option value="E">Eric</option>
+              </select>
+            </div>
+            <div class="form-group div-add-into">
+              <label class="form-label" for="inDay">Agregar a día</label>
+              <select class="form-control" id="inDay">
+                <option value=""></option>
+                <option value="L">Lunes</option>
+                <option value="M">Martes</option>
+                <option value="X">Miércoles</option>
+                <option value="J">Jueves</option>
+                <option value="V">Viernes</option>
+                <option value="S">Sábado</option>
+                <option value="D">Domingo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="finishedInput">
+                <label class="form-check-label" for="finishedInput"><b>Tarea terminada</b></label>
+              </div>
+            </div>
+            <span style="width: 100%; text-align: center; margin-top: 10px;">
+              <button id="modal-add-create" class="btn btn-primary" type="submit" style="width: 325px;">Crear tarea</button>
+              <button id="modal-add-save" class="btn btn-success" style="width: 325px;">Guardar tarea</button>
+            </span>
+          </form>
+        </div>    
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="myModalDelete" tabindex="1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">Eliminar tarea</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro que quieres borrar esta tarea?</p>
+        </div>
+        <button type="button" class="btn btn-danger" id="deleteCard">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="fileTask" tabindex="1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="width: 600px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabelFile">Añadir archivo a la tarea</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- <form id="myFileForm" enctype="multipart/form-data"> -->
+          <form id="myFileForm" action="/">
+            <input type="hidden" id="file-task-card" value=""/>
+            <div class="form-group form-group-file">
+              <label class="form-label" for="myFile">Añadir archivo</label>
+              <input class="form-control form-control-sm" type="file" placeholder="Buscar archivo" name="myFile"/>
+            </div>
+            <span style="width: 100%; text-align: center; margin-top: 10px;">
+              <button type="submit" class="btn btn-primary" id="addFile" style="width: 325px;">Añadir archivo</button>
+            </span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+          crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../../js/producto3/dashboard.js"></script>
+
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast text-bg-info" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header">
+            <i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;<strong class="me-auto">Datos actualizados</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Se han actualizado los datos en el servidor de base de datos.
+        </div>
+    </div>
+  </div>
+
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="fileToast" class="toast text-bg-info" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header">
+            <i class="fa fa-file-o" aria-hidden="true"></i>&nbsp;<strong class="me-auto">Archivo importado correctamente</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Se ha subido correctamente el archivo seleccionado a la ruta <i>app/data/upload/</i> del servidor.
+        </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

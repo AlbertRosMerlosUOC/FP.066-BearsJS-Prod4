@@ -1,0 +1,7 @@
+[
+	{"_id":{"$oid":"64439f84030272c28184e037"},"week":{"$numberInt":"1"},"year":{"$numberInt":"2023"},"description":"Semana 1","type":"T","hour_ini":"10:00","hour_end":"14:30","color":"#008000"},
+	{"_id":{"$oid":"64439f84030272c28184e038"},"week":{"$numberInt":"2"},"year":{"$numberInt":"2023"},"description":"Semana 2","type":"P","hour_ini":"14:00","hour_end":"16:30","color":"#800080"},
+	{"_id":{"$oid":"64439f84030272c28184e039"},"week":{"$numberInt":"3"},"year":{"$numberInt":"2023"},"description":"Semana 3","type":"T","hour_ini":"09:00","hour_end":"17:00","color":"#0000ff"},
+	{"_id":{"$oid":"64439f84030272c28184e03a"},"week":{"$numberInt":"4"},"year":{"$numberInt":"2023"},"description":"Semana 4","type":"P","hour_ini":"09:00","hour_end":"17:00","color":"#ffa500"},
+	{"_id":{"$oid":"64439f84030272c28184e03b"},"week":{"$numberInt":"5"},"year":{"$numberInt":"2023"},"description":"Semana 5 (sin tareas)","type":"P","hour_ini":"12:00","hour_end":"16:00","color":"#EEEE00"}
+]

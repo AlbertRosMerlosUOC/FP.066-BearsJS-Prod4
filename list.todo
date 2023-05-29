@@ -1,0 +1,2 @@
+To do list:
+    - Hay un bug en el updatedTask, que como no tiene campo de dia, lo pone al 0

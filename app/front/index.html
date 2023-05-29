@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BearsJS</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/base.css">
+  </head>
+
+  <body>
+    <div class="section">
+      <nav class="navbar navbar-expand-sm bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">BearsJS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBar" aria-controls="navBar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          <div class="collapse navbar-collapse" id="navBar">
+            <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item disabled" href="#">Producto 1</a></li>
+                  <li><a class="dropdown-item disabled" href="#">Producto 2</a></li>
+                  <li><a class="dropdown-item" href="html/producto3/producto3.html">Producto 3</a></li>
+                  <li><a class="dropdown-item disabled" href="#">Producto 4</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="html/equipo/equipo.html">Equipo</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="accordion" id="accordionProducts">
+        <!-- Producto 1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-product-1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-product-1" aria-expanded="true" aria-controls="c-product-1" style="font-size: 20px !important;">
+              Producto 1
+            </button>
+          </h2>
+          <div id="c-product-1" class="accordion-collapse collapse" aria-labelledby="h-product-1" data-bs-parent="#accordionProducts">
+            <div class="accordion-body" style="text-align: justify;">
+              <h5>Creando la parte visible de nuestra aplicación. FrontEnd</h5>
+              <p class="card-text">En este producto hemos creado un <b>PROYECTO PROPIO</b> y en <b>EQUIPO</b> que ha seguido las indicaciones de un proyecto tipo 
+                <i>Agenda Semanal</i> usando las tecnologías base de desarrollo de frontal: <b>HTML</b>, <b>CSS</b> y <b>JS</b>, y que el equipo <b>HA ADAPTADO LAS 
+                  INDICACIONES AL PROYECTO PRESENTADO</b>. Para ello hemos incorporado tanto el <b></b>framework Bootstrap</b> como las <b>API de HTML</b> que nos 
+                  permitan dar la interactividad a nuestro diseño.</p>
+              <p class="card-text">En este producto hemos dejado listas las opciones básicas de nuestro frontal, en el caso del proyecto: semanas del mes, días de esa semana, 
+                  creación de tareas a hacer y la posibilidad de mover tareas entre los días de la semana, para ello necesitamos que nuestra aplicación sea sencilla y fácil de 
+                  usar por parte de los usuarios, y para ello las herramientas de frontal nos ayudarán a ese desarrollo.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Producto 2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-product-2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-product-2" aria-expanded="true" aria-controls="c-product-2" style="font-size: 20px !important;">
+              Producto 2
+            </button>
+          </h2>
+          <div id="c-product-2" class="accordion-collapse collapse" aria-labelledby="h-product-2" data-bs-parent="#accordionProducts">
+            <div class="accordion-body" style="text-align: justify;">
+              <h5>Sirviendo datos con GraphQL y MongoDB</h5>
+              <p class="card-text">En este producto hemos implementado un servidor con <b>Node/Express</b> en el que serviremos la información a partir del gestor de bases de datos 
+                <b>MongoDB</b> y utilizando la especificación <b>GraphQL</b> para proveer de los argumentos para realizar las <i>Queries</i> y los <i>Mutations</i> para interactuar 
+                con el frontal en el siguiente producto.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Producto 3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-product-3">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c-product-3" aria-expanded="true" aria-controls="c-product-3" style="font-size: 20px !important;">
+              Producto 3
+            </button>
+          </h2>
+          <div id="c-product-3" class="accordion-collapse collapse show" aria-labelledby="h-product-3" data-bs-parent="#accordionProducts">
+            <div class="accordion-body" style="text-align: justify;">
+              <h5>Añadiendo, modificando y borrando información</h5>
+              <p class="card-text">En este producto modificaremos el producto 2 para poder interactuar de forma completa con los datos de la base de datos añadiendo las mutaciones 
+                correspondientes a nuestro API, así como las modificaciones necesarias en nuestro frontal para poder interactuar.</p>
+              <a href="./html/producto3/producto3.html" class="btn btn-primary">Producto 3</a>
+            </div>
+          </div>
+        </div>
+        <!-- Producto 4 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-product-4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-product-4" aria-expanded="true" aria-controls="c-product-4" style="font-size: 20px !important;">
+              Producto 4
+            </button>
+          </h2>
+          <div id="c-product-4" class="accordion-collapse collapse" aria-labelledby="h-product-4" data-bs-parent="#accordionProducts">
+            <div class="accordion-body">
+              <h5>Trabajando en tiempo real de forma colaborativa</h5>
+              <p class="card-text">En desarrollo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script> -->
+    <!-- <script src="/socket.io/socket.io.min.js"></script> -->
+    <!-- <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script> -->
+    <!-- <script src="../index.js"></script> -->
+    <!-- <script src="./iojs/io.js"></script> -->
+  </body>
+
+</html>
