@@ -1,4 +1,5 @@
 const Week = require("../models/Week");
+const pubsub = require("../pubsub");
 
 const getWeeks = async () => {
   return await Week.find();
@@ -21,6 +22,7 @@ const createWeek = async (
     hour_end,
     color,
   });
+  pubsub.publish("NEW_WEEK", { newWeek });
   return await newWeek.save();
 };
 
@@ -33,11 +35,13 @@ const updateWeek = async (
     { week, year, description, type, hour_ini, hour_end, color },
     { new: true }
   );
+  pubsub.publish("UPDATED_WEEK", { updatedWeek });
   return updatedWeek;
 };
 
 const deleteWeek = async (_, { _id }) => {
   const deletedWeek = await Week.findByIdAndDelete(_id);
+  pubsub.publish("DELETED_WEEK", { deletedWeek });
   return deletedWeek;
 };
 

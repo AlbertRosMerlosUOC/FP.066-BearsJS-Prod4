@@ -32,6 +32,32 @@ const resolvers = {
     // Resolver para eliminar una tarea por _id
     deleteTask: tasksController.deleteTask,
   },
+  Subscription: {
+    // Resolver para mostrar un mensaje de creación de una semana
+    newWeek: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_WEEK"),
+    },
+    // Resolver para mostrar un mensaje de actualización de una semana
+    updatedWeek: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("UPDATED_WEEK"),
+    },
+    // Resolver para mostrar un mensaje de eliminación de una semana
+    deletedWeek: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("DELETED_WEEK"),
+    },
+    // Resolver para mostrar un mensaje de creación de una tarea
+    newTask: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_TASK"),
+    },
+    // Resolver para mostrar un mensaje de actualización de una tarea
+    updatedTask: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("UPDATED_TASK"),
+    },
+    // Resolver para mostrar un mensaje de eliminación de una tarea
+    deletedTask: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("DELETED_TASK"),
+    },
+  },
 };
 
 // Exportar el objeto resolvers

@@ -73,12 +73,18 @@ const typeDefs = gql`
       finished: Boolean
     ): Task
 
-    updateTaskDay(
-      _id: ID!
-      in_day: String
-    ): Task
+    updateTaskDay(_id: ID!, in_day: String): Task
 
     deleteTask(_id: ID!): Task
+  }
+
+  type Subscription {
+    weekAdded: Week
+    weekUpdated: Week
+    weekDeleted: Week
+    taskAdded: Task
+    taskUpdated: Task
+    taskDeleted: Task
   }
 
   type Query {

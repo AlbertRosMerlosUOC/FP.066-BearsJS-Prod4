@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const pubsub = require("../pubsub");
 
 const getTasks = async () => {
   return await Task.find().populate("_id_week");
@@ -38,22 +39,13 @@ const createTask = async (
     in_day,
     finished,
   });
+  pubsub.publish("createTask", { createTask: newTask });
   return await newTask.save();
 };
 
 const updateTask = async (
   _,
-  {
-    _id,
-    name,
-    description,
-    hour_ini,
-    hour_end,
-    type,
-    user,
-    in_day,
-    finished,
-  }
+  { _id, name, description, hour_ini, hour_end, type, user, in_day, finished }
 ) => {
   const updatedTask = await Task.findByIdAndUpdate(
     _id,
@@ -68,24 +60,18 @@ const updateTask = async (
       finished,
     },
     { new: true }
-  )
-    .exec();
+  ).exec();
+  pubsub.publish("updateTask", { updateTask: updatedTask });
   return updatedTask;
 };
 
-const updateTaskDay = async (
-  _,
-  {
-    _id,
-    in_day,
-  }
-) => {
+const updateTaskDay = async (_, { _id, in_day }) => {
   const updatedTaskDay = await Task.findByIdAndUpdate(
     _id,
     { in_day },
     { new: true }
-  )
-    .exec();
+  ).exec();
+  pubsub.publish("updateTaskDay", { updateTaskDay: updatedTaskDay });
   return updatedTaskDay;
 };
 
@@ -93,6 +79,7 @@ const deleteTask = async (_, { _id }) => {
   const deletedTask = await Task.findByIdAndDelete(_id)
     .populate("_id_week")
     .exec();
+  pubsub.publish("deleteTask", { deleteTask: deletedTask });
   return deletedTask;
 };
 

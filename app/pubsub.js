@@ -1,5 +1,5 @@
-const { PubSub } = require('apollo-server-express');
+const { PubSub } = require("apollo-server-express");
 
-const pubsub = new PubSub()
+const pubsub = new PubSub();
 
-module.exports = pubsub
+module.exports = pubsub;
