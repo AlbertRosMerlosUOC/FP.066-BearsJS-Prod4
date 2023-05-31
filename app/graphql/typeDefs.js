@@ -88,6 +88,10 @@ const typeDefs = gql`
     getTasks: [Task]
     getTasksByWeek(_id_week: String!): [Task!]!
   }
+
+  type Subscription {
+    taskMoved: String
+  }
 `;
 
 module.exports = typeDefs;

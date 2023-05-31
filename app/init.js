@@ -6,7 +6,7 @@ const resolvers = require("./resolvers/resolvers");
 const express = require("express");
 const HOST = "localhost";
 const PORT = 3000;
-// const { pubsub } = require("./pubsub")
+const pubsub = require('./pubsub');
 
 // Necesario para la carga de archivos
 const multer = require('multer');
@@ -94,7 +94,7 @@ app.post('/upload', upload.single("myFile"), (req, res, next) => {
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  // context: { pubsub },
+  context: { pubsub },
 });
 
 // Arranque de los servidores

@@ -32,6 +32,11 @@ const resolvers = {
     // Resolver para eliminar una tarea por _id
     deleteTask: tasksController.deleteTask,
   },
+  Subscription: {
+    taskMoved: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('TASK_MOVED'),
+    },
+  },
 };
 
 // Exportar el objeto resolvers
