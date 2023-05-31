@@ -6,12 +6,10 @@ const resolvers = require("./resolvers/resolvers");
 const express = require("express");
 const HOST = "localhost";
 const PORT = 3000;
-const PubSub = require("./pubsub");
 
 // Necesario para las suscripciones
 const { execute, subscribe } = require("graphql");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
-const pubsub = new PubSub();
 
 // Necesario para la carga de archivos
 const multer = require("multer");
@@ -80,7 +78,7 @@ io.on("connection", (socket) => {
 // Configuración de CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http:localhost:3000",
   })
 );
 
@@ -100,12 +98,6 @@ app.post("/upload", upload.single("myFile"), (req, res, next) => {
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  subscriptions: {
-    path: "/subscriptions",
-    onConnect: () => console.log("Conectado a GraphQL"),
-    onDisconnect: () => console.log("Desconectado de GraphQL"),
-  },
-  context: { pubsub }, // Pasa el pubsub como parte del contexto
 });
 
 SubscriptionServer.create(
@@ -118,7 +110,7 @@ SubscriptionServer.create(
   },
   {
     server: server,
-    path: apolloServer.graphqlPath,
+    path: "/subscriptions",
   }
 );
 
@@ -127,7 +119,7 @@ apolloServer.listen({ port: process.env.PORT || 5000 }).then(({ url }) => {
   console.log(`Servidor Apollo en funcionamiento en ${url}`);
 
   server.listen(PORT, HOST, () => {
-    console.log(`Servidor Web en funcionamiento en http://${HOST}:${PORT}`);
+    console.log(`Servidor Web en funcionamiento en http:${HOST}:${PORT}`);
     console.log(`Servidor Socket.io en funcionamiento en el puerto ${PORT}`);
   });
 });
