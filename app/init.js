@@ -1,5 +1,6 @@
 const { ApolloServer } = require("apollo-server");
-const { makeExecutableSchema } = require("graphql-tools");
+// const { makeExecutableSchema } = require("graphql-tools");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
 const { MongoClient, ObjectId } = require("mongodb");
 const { database } = require("./config/database");
 const typeDefs = require("./graphql/typeDefs");
@@ -95,7 +96,9 @@ app.post("/upload", upload.single("myFile"), (req, res, next) => {
   res.send(file);
 });
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+// const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = new makeExecutableSchema({ typeDefs, resolvers });
+
 // Inicio del servidor Apollo
 const apolloServer = new ApolloServer({
   schema,
