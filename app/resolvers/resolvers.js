@@ -50,6 +50,10 @@ const resolvers = {
     newTask: {
       subscribe: () => pubsub.asyncIterator(["NEW_TASK"]),
     },
+    // Subscription para mover una tarea
+    moveTask: {
+      subscribe: () => pubsub.asyncIterator(["MOVE_TASK"]),
+    },
   },
 };
 

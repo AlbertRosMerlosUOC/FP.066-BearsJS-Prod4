@@ -82,6 +82,7 @@ const typeDefs = gql`
     hello: String
     newWeek: Week
     newTask: Task
+    moveTask: String
   }
 
   type Query {
