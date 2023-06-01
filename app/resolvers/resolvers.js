@@ -42,6 +42,10 @@ const resolvers = {
     weekDeleted: {
       subscribe: () => pubsub.asyncIterator("WEEK_DELETED"),
     },
+    // Resolver para suscribirse a la actualización de una semana
+    weekUpdated: {
+      subscribe: () => pubsub.asyncIterator("WEEK_UPDATED"),
+    },
     // Resolver para suscribirse a la creación de una tarea
     taskCreated: {
       subscribe: () => pubsub.asyncIterator("TASK_CREATED"),
