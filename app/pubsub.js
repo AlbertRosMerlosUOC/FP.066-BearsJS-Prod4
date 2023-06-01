@@ -1,4 +1,4 @@
-const { PubSub } = require("apollo-server-express");
+const { PubSub } = require("graphql-subscriptions");
 
 const pubsub = new PubSub();
 

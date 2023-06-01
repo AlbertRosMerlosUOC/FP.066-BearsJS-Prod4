@@ -39,7 +39,7 @@ const createTask = async (
     in_day,
     finished,
   });
-  pubsub.publish("createTask", { createTask: newTask });
+  pubsub.publish("createTask", { newTask });
   return await newTask.save();
 };
 
@@ -61,7 +61,7 @@ const updateTask = async (
     },
     { new: true }
   ).exec();
-  pubsub.publish("updateTask", { updateTask: updatedTask });
+  pubsub.publish("updateTask", { updatedTask });
   return updatedTask;
 };
 
@@ -71,7 +71,7 @@ const updateTaskDay = async (_, { _id, in_day }) => {
     { in_day },
     { new: true }
   ).exec();
-  pubsub.publish("updateTaskDay", { updateTaskDay: updatedTaskDay });
+  pubsub.publish("updateTask", { updatedTaskDay });
   return updatedTaskDay;
 };
 
@@ -79,7 +79,7 @@ const deleteTask = async (_, { _id }) => {
   const deletedTask = await Task.findByIdAndDelete(_id)
     .populate("_id_week")
     .exec();
-  pubsub.publish("deleteTask", { deleteTask: deletedTask });
+  pubsub.publish("deleteTask", { deletedTask });
   return deletedTask;
 };
 

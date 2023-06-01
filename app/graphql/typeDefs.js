@@ -79,10 +79,9 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    weekAdded: Week
-    weekUpdated: Week
+    weekCreated: Week
     weekDeleted: Week
-    taskAdded: Task
+    taskCreated: Task
     taskUpdated: Task
     taskDeleted: Task
   }

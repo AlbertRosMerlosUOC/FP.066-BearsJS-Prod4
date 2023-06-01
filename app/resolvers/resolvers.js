@@ -1,6 +1,7 @@
 // Importar los controladores
 const weeksController = require("../controllers/weeksController");
 const tasksController = require("../controllers/tasksController");
+const pubsub = require("../pubsub");
 
 // Crear el objeto resolvers
 const resolvers = {
@@ -33,29 +34,25 @@ const resolvers = {
     deleteTask: tasksController.deleteTask,
   },
   Subscription: {
-    // Resolver para mostrar un mensaje de creación de una semana
-    newWeek: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_WEEK"),
+    // Resolver para suscribirse a la creación de una semana
+    weekCreated: {
+      subscribe: () => pubsub.asyncIterator("WEEK_CREATED"),
     },
-    // Resolver para mostrar un mensaje de actualización de una semana
-    updatedWeek: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("UPDATED_WEEK"),
+    // Resolver para suscribirse a la eliminación de una semana
+    weekDeleted: {
+      subscribe: () => pubsub.asyncIterator("WEEK_DELETED"),
     },
-    // Resolver para mostrar un mensaje de eliminación de una semana
-    deletedWeek: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("DELETED_WEEK"),
+    // Resolver para suscribirse a la creación de una tarea
+    taskCreated: {
+      subscribe: () => pubsub.asyncIterator("TASK_CREATED"),
     },
-    // Resolver para mostrar un mensaje de creación de una tarea
-    newTask: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_TASK"),
+    // Resolver para suscribirse a la actualización de una tarea
+    taskUpdated: {
+      subscribe: () => pubsub.asyncIterator("TASK_UPDATED"),
     },
-    // Resolver para mostrar un mensaje de actualización de una tarea
-    updatedTask: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("UPDATED_TASK"),
-    },
-    // Resolver para mostrar un mensaje de eliminación de una tarea
-    deletedTask: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("DELETED_TASK"),
+    // Resolver para suscribirse a la eliminación de una tarea
+    taskDeleted: {
+      subscribe: () => pubsub.asyncIterator("TASK_DELETED"),
     },
   },
 };
