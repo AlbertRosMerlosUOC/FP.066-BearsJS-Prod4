@@ -1,7 +1,7 @@
 // Importar los controladores
 const weeksController = require("../controllers/weeksController");
 const tasksController = require("../controllers/tasksController");
-//const pubsub = require("../pubsub");
+const pubsub = require("../pubsub");
 
 // Crear el objeto resolvers
 const resolvers = {

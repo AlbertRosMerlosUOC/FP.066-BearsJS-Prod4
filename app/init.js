@@ -8,6 +8,27 @@ const resolvers = require("./resolvers/resolvers");
 const express = require("express");
 const HOST = "localhost";
 const PORT = 3000;
+const ApolloServerPluginDrainHttpServer =
+  require("apollo-server-core").ApolloServerPluginDrainHttpServer;
+
+const bodyParser = require("body-parser");
+//const expressMiddleware = require("graphql-voyager/middleware").express;
+
+const { ApolloSandbox } = require("@apollo/sandbox");
+
+const app = express();
+app.use(express.static("build"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const cors = require("cors");
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+const httpServer = http.createServer(app);
+const { WebSocketServer } = require("ws");
+const { useServer } = require("graphql-ws/lib/use/ws");
 
 // Necesario para las suscripciones
 // const { execute, subscribe } = require("graphql");
@@ -25,16 +46,6 @@ var diskStorage = multer.diskStorage({
   },
 });
 var upload = multer({ storage: diskStorage });
-
-const app = express();
-app.use(express.static("build"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const cors = require("cors");
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
 
 io.on("connection", (socket) => {
   // Albert: Podemos comprobar si un cliente se conecta descomentando la siguiente línea
@@ -84,8 +95,6 @@ app.use(
   })
 );
 
-app.use("/", express.static(__dirname + "/front"));
-
 app.post("/upload", upload.single("myFile"), (req, res, next) => {
   const file = req.file;
   if (!file) {
@@ -96,15 +105,39 @@ app.post("/upload", upload.single("myFile"), (req, res, next) => {
   res.send(file);
 });
 
-// const schema = makeExecutableSchema({ typeDefs, resolvers });
 const schema = new makeExecutableSchema({ typeDefs, resolvers });
 
 // Inicio del servidor Apollo
 const apolloServer = new ApolloServer({
   schema,
-  typeDefs,
-  resolvers,
+  plugins: [
+    // Proper shutdown for the HTTP server.
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+
+    // Proper shutdown for the WebSocket server.
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    },
+  ],
 });
+
+const wsServer = new WebSocketServer({
+  server: httpServer,
+
+  path: "/graphql",
+});
+
+const serverCleanup = useServer({ schema }, wsServer);
+
+app.use("/graphql", cors(), bodyParser.json());
+
+app.use("/", express.static(__dirname + "/front"));
 
 // Arranque de los servidores
 apolloServer.listen({ port: process.env.PORT || 5000 }).then(({ url }) => {
