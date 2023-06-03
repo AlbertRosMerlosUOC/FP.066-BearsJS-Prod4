@@ -1,17 +1,19 @@
-const { ApolloServer } = require("apollo-server");
-// const { makeExecutableSchema } = require("graphql-tools");
+const { ApolloServer } = require("@apollo/server");
+const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
 const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { expressMiddleware } = require('@apollo/server/express4');
+
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+
 const { MongoClient, ObjectId } = require("mongodb");
 const { database } = require("./config/database");
+
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./resolvers/resolvers");
-const express = require("express");
 const HOST = "localhost";
 const PORT = 3000;
-
-// Necesario para las suscripciones
-// const { execute, subscribe } = require("graphql");
-// const { SubscriptionServer } = require("subscriptions-transport-ws");
 
 // Necesario para la carga de archivos
 const multer = require("multer");
@@ -30,11 +32,10 @@ const app = express();
 app.use(express.static("build"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const cors = require("cors");
-const http = require("http");
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
   // Albert: Podemos comprobar si un cliente se conecta descomentando la siguiente línea
@@ -96,22 +97,25 @@ app.post("/upload", upload.single("myFile"), (req, res, next) => {
   res.send(file);
 });
 
-// const schema = makeExecutableSchema({ typeDefs, resolvers });
-const schema = new makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 // Inicio del servidor Apollo
 const apolloServer = new ApolloServer({
   schema,
-  typeDefs,
-  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-// Arranque de los servidores
-apolloServer.listen({ port: process.env.PORT || 5000 }).then(({ url }) => {
-  console.log(`Servidor Apollo en funcionamiento en ${url}`);
+async function startApolloServer() {
+  await apolloServer.start();
+  // apolloServer.applyMiddleware({ app });
+}
 
-  server.listen(PORT, HOST, () => {
-    console.log(`Servidor Web en funcionamiento en http://${HOST}:${PORT}`);
-    console.log(`Servidor Socket.io en funcionamiento en el puerto ${PORT}`);
-  });
+startApolloServer().then();
+
+
+
+// Arranque de los servidores
+httpServer.listen(PORT, HOST, () => {
+  console.log(`Servidor Web en funcionamiento en http://${HOST}:${PORT}`);
+  console.log(`Servidor Socket.io en funcionamiento en el puerto ${PORT}`);
 });
