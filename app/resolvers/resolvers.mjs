@@ -1,3 +1,5 @@
+import { pubsub } from '../config/pubsub.mjs';
+
 // Importar los controladores
 import { 
   getWeeks,
@@ -62,9 +64,9 @@ export const resolvers = {
     // newTask: {
     //   subscribe: () => pubsub.asyncIterator(["NEW_TASK"]),
     // },
-    // // Subscription para mover una tarea
-    // moveTask: {
-    //   subscribe: () => pubsub.asyncIterator(["MOVE_TASK"]),
-    // },
+    // Subscription para mover una tarea
+    moveTask: {
+      subscribe: () => pubsub.asyncIterator("moveTask"),
+    },
   },
 };

@@ -191,6 +191,7 @@ form.addEventListener("submit", (event) => {
     function dragEnd() {
       // Restablecer el efecto de arrastrar
       this.classList.remove("dragging");
+      // TODO window.moveTarea(data, currentColumn, sessionUserName);
     }
   
     // Agregar la tarjeta al contenedor que toque según el día clickado
@@ -711,3 +712,22 @@ fileModal.addEventListener("hidden.bs.modal", function (event) {
   // Mostramos el campo de añadir al día
   document.querySelector(".div-add-into").style.display = "block";
 });
+
+const graphQLWsClient = window.graphQLWsClient = graphqlWs.createClient({
+  url: 'ws://localhost:3000/graphql',
+});
+
+// TODO
+const subscribeMoveTask = graphQLWsClient.subscribe(
+  {
+    query: 'subscription { moveTask { _id } }',
+  },
+  {
+    next: (args) => {
+      alertify.success(`Hola?`);
+      console.log('next', args)
+    },
+    error: (e) => console.log('error', e),
+    complete: () => console.log('complete'),
+  },
+);

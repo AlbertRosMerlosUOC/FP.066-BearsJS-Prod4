@@ -86,6 +86,6 @@ export const typeDefs = `
 
   type Subscription {
     hello: String
-
+    moveTask: Task
   }
 `

@@ -1,70 +1,77 @@
 import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import { expressMiddleware } from '@apollo/server/express4';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { WebSocketServer } from 'ws';
+import { Server } from 'socket.io';
 import { useServer } from 'graphql-ws/lib/use/ws';
+import { WebSocketServer } from 'ws';
 
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { Server } from 'socket.io';
 
 import "./database.mjs";
+import { resolvers } from '../resolvers/resolvers.mjs';
 import { typeDefs } from '../graphql/typeDefs.mjs';
 
-// TODO import { resolvers } from '../resolvers/resolvers.mjs';
-import { 
-  getWeeks,
-  getWeekById,
-  createWeek,
-  updateWeek,
-  deleteWeek, } from "../controllers/weeksController.mjs";
-
-import {
-  getTasks,
-  getTaskById,
-  getTasksByWeek,
-  createTask,
-  updateTask,
-  updateTaskDay,
-  deleteTask, } from "../controllers/tasksController.mjs";
-
-const resolvers = {
-    Query: {
-      getWeeks: getWeeks,
-      getWeekById: getWeekById,
-      getTasks: getTasks,
-      getTaskById: getTaskById,
-      getTasksByWeek: getTasksByWeek,
-    },
-    Mutation: {
-      createWeek: createWeek,
-      updateWeek: updateWeek,
-      deleteWeek: deleteWeek,
-      createTask: createTask,
-      updateTask: updateTask,
-      updateTaskDay: updateTaskDay,
-      deleteTask: deleteTask,
-    },
-    Subscription: {
-      hello: {
-        // Example using an async generator
-        subscribe: async function* () {
-          for await (const word of ["Hello", "Bonjour", "Ciao"]) {
-            yield { hello: word };
-          }
-        },
-      },
-    },
-  }
-
-import { pubsub } from './pubsub.mjs';
+// TODO
+// import { multer } from 'multer';
+// var diskStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "app/data/upload");
+//   },
+//   filename: function (req, file, cb) {
+//     const pre = Date.now() + "-" + Math.round(Math.random() * 1e4);
+//     cb(null, pre + "-" + file.originalname);
+//   },
+// });
+// var upload = multer({ storage: diskStorage });
 
 const app = express();
+      app.use(express.static("build"));
+      app.use(express.json());
+      app.use(express.urlencoded({ extended: true }));
 const httpServer = http.createServer(app);
+
 const io = new Server(httpServer);
+io.on("connection", (socket) => {
+  // Recolector de eventos que emiten mensajes
+  socket.on("createWeek", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("deleteWeek", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("createTask", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("updateTaskDay", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("updateTask", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("deleteTask", (msg) => {
+    console.log(msg);
+    io.emit("showToast", msg);
+  });
+
+  socket.on("importFile", (msg) => {
+    console.log(msg);
+    io.emit("fileToast", msg);
+  });
+});
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 

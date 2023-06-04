@@ -1,5 +1,8 @@
 import Task from "../models/Task.mjs";
 // import pubsub from "../config/pubsub.mjs";
+import { PubSub } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
 
 export const getTasks = async () => {
   return await Task.find().populate("_id_week");
@@ -71,7 +74,7 @@ export const updateTaskDay = async (_, { _id, in_day }) => {
     { in_day },
     { new: true }
   ).exec();
-  // pubsub.publish("updateTask", { updatedTaskDay });
+  pubsub.publish("moveTask", { updatedTaskDay });
   return updatedTaskDay;
 };
 
