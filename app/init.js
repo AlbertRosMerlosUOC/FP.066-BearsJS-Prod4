@@ -110,34 +110,22 @@ const schema = new makeExecutableSchema({ typeDefs, resolvers });
 // Inicio del servidor Apollo
 const apolloServer = new ApolloServer({
   schema,
-  plugins: [
-    // Proper shutdown for the HTTP server.
-    ApolloServerPluginDrainHttpServer({ httpServer }),
-
-    // Proper shutdown for the WebSocket server.
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          },
-        };
-      },
-    },
-  ],
+  context: ({ req, res }) => {
+    return { req, res };
+  },
 });
 
-const wsServer = new WebSocketServer({
-  server: httpServer,
+// const wsServer = new WebSocketServer({
+//   server: httpServer,
 
-  path: "/graphql",
-});
+//   path: "/graphql",
+// });
 
-const serverCleanup = useServer({ schema }, wsServer);
+// const serverCleanup = useServer({ schema }, wsServer);
 
-app.use("/graphql", cors(), bodyParser.json());
+// app.use("/graphql", cors(), bodyParser.json());
 
-app.use("/", express.static(__dirname + "/front"));
+// app.use("/", express.static(__dirname + "/front"));
 
 // Arranque de los servidores
 apolloServer.listen({ port: process.env.PORT || 5000 }).then(({ url }) => {
