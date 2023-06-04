@@ -1,5 +1,5 @@
-const Task = require("../models/Task");
-const pubsub = require("../pubsub");
+const Task = require("../models/_Task");
+const pubsub = require("../_pubsub");
 
 const getTasks = async () => {
   return await Task.find().populate("_id_week");

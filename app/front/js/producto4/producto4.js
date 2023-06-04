@@ -52,7 +52,8 @@ form.addEventListener("submit", (event) => {
   var _id = "";
 
   // Fetch para crear una semana
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -223,7 +224,8 @@ function writeCard(item) {
     element.parentNode.removeChild(element);
 
     // Fetch para eliminar una tarea
-    fetch("http://localhost:5000", {
+    // PENDING fetch("http://localhost:5000", {
+    fetch("http://localhost:3000/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -249,7 +251,8 @@ function writeCard(item) {
 
 // Carga de datos inicial con conexión a MongoDB.
 // Conexion al servidor GraphQl para la llamada getWeeks
-fetch("http://localhost:5000", {
+// PENDING fetch("http://localhost:5000", {
+fetch("http://localhost:3000/graphql", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",

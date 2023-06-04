@@ -80,7 +80,8 @@ form.addEventListener("submit", (event) => {
   var _id = "";
 
   // Fetch para crear una semana
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -264,7 +265,8 @@ function drop(event) {
   
   var id_task = draggedElement.id;
   // Fetch para actualizar el día asignado a una tarea
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -333,7 +335,8 @@ saveTask.addEventListener("click", () => {
   const fini = document.querySelector("#finishedInput").checked ? true : false;
   
   // Fetch para actualizar una tarea
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -546,7 +549,8 @@ function writeCard(item) {
 // Elimina el elemento padre del elemento que se haya seleccionado
 function tareaEliminada(_id) {
   // Fetch para eliminar una tarea
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -573,7 +577,8 @@ function tareaEliminada(_id) {
 // Conexion al servidor GraphQl para la llamada getTasksByWeek(idWeek)
 // Se ejecutará siempre y cuando la semana no provenga del mockup (es decir, cuando venga de base de datos)
 if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no estamos en el producto 2, donde se podían crear semanas como mockup
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -598,7 +603,8 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
       res.data.getTasksByWeek.map((item) => writeCard(item));
     });
   
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -622,7 +628,8 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
 }
 
 function llenarDatosTarea(id) {
-  fetch("http://localhost:5000", {
+  // PENDING fetch("http://localhost:5000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -664,7 +671,8 @@ fileForm.addEventListener("submit", (e) => {
 
   if (e.currentTarget.myFile.files.length > 0) {
     // Realiza la solicitud para subir el archivo
-    fetch('http://localhost:3000/upload', {
+    // PENDING fetch("http://localhost:5000", {
+    fetch("http://localhost:3000/upload", {
       method: 'POST',
       body: postData
     })
