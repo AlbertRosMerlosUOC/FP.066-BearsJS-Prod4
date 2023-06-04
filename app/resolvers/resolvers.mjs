@@ -15,7 +15,6 @@ import {
   updateTask,
   updateTaskDay,
   deleteTask, } from "../controllers/tasksController.mjs";
-// import pubsub from "../config/pubsub.mjs";a
 
 // Crear el objeto resolvers
 export const resolvers = {
@@ -56,17 +55,9 @@ export const resolvers = {
         }
       },
     },
-    // Subscription para crear una semana
-    // newWeek: {
-    //   subscribe: () => pubsub.asyncIterator(["NEW_WEEK"]),
-    // },
-    // // Subscription para crear una tarea
-    // newTask: {
-    //   subscribe: () => pubsub.asyncIterator(["NEW_TASK"]),
-    // },
     // Subscription para mover una tarea
     moveTask: {
-      subscribe: () => pubsub.asyncIterator("moveTask"),
+      subscribe: () => pubsub.asyncIterator(['MOVE_TASK']),
     },
   },
 };

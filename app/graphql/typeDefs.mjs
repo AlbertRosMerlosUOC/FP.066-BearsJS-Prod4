@@ -1,4 +1,4 @@
-export const typeDefs = `
+export const typeDefs = `#graphql
   type Week {
     _id: ID!
     week: Int!

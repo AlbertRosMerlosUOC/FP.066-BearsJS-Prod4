@@ -1,5 +1,6 @@
 import Task from "../models/Task.mjs";
 // import pubsub from "../config/pubsub.mjs";
+const MOVE_TASK = "MOVE_TASK";
 import { PubSub } from 'graphql-subscriptions';
 
 const pubsub = new PubSub();
@@ -68,14 +69,15 @@ export const updateTask = async (
   return updatedTask;
 };
 
-export const updateTaskDay = async (_, { _id, in_day }) => {
-  const updatedTaskDay = await Task.findByIdAndUpdate(
-    _id,
-    { in_day },
-    { new: true }
-  ).exec();
-  pubsub.publish("moveTask", { updatedTaskDay });
-  return updatedTaskDay;
+export const updateTaskDay = async (root, args) => {
+  const task = await (Task.findById(args._id).exec());
+  task.in_day = args.in_day || task.in_day;
+  try {
+    pubsub.publish(MOVE_TASK, { moveTask: task });
+  } catch (error) {
+    console.log(error);
+  }
+  return task.save();
 };
 
 export const deleteTask = async (_, { _id }) => {

@@ -75,6 +75,12 @@ io.on("connection", (socket) => {
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/graphql',
+});
+const serverCleanup = useServer({ schema }, wsServer);
+
 const server = new ApolloServer({
   schema,
   plugins: [
@@ -91,13 +97,6 @@ const server = new ApolloServer({
   ],
 });
 await server.start();
-
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/graphql',
-});
-
-const serverCleanup = useServer({ schema }, wsServer);
 
 app.use(
   '/graphql',
