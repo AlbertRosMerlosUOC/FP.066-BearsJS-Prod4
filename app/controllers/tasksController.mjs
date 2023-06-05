@@ -25,7 +25,7 @@ export const createTask = async (
     type,
     user,
     in_day,
-    finished,
+    finished
   }
 ) => {
   const newTask = new Task({
@@ -37,7 +37,7 @@ export const createTask = async (
     type,
     user,
     in_day,
-    finished,
+    finished
   });
   let estado = "success";
   let mensaje = "Un usuario ha creado una nueva tarea con nombre '<i>" + name + "</i>'. Actualice la página para ver los cambios.";
@@ -59,7 +59,7 @@ export const updateTask = async (
       type,
       user,
       in_day,
-      finished,
+      finished
     },
     { new: true }
   ).exec();
@@ -78,6 +78,17 @@ export const updateTaskDay = async (root, args) => {
     pubsub.publish("MOVE_TASK", { movedTask: { estado, mensaje } });
   });
   return updatedTask;
+};
+
+export const updateTaskFile = async (root, args) => {
+  const task = await Task.findById(args._id).exec();
+  task.file_name = args.file_name || task.file_name;
+  const updatedFile = await task.save().then(() => {
+    let estado = "success";
+    let mensaje = "Un usuario ha añadido un archivo a la tarea '<i>" + task.name + "</i>'. Actualice la página para ver los cambios.";
+    pubsub.publish("ADD_FILE", { uploadedFile: { estado, mensaje } });
+  });
+  return updatedFile;
 };
 
 export const deleteTask = async (_, { _id }) => {

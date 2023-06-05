@@ -17,7 +17,6 @@ import { pubsub } from "./pubsub.mjs";
 import { resolvers } from "../resolvers/resolvers.mjs";
 import { typeDefs } from "../graphql/typeDefs.mjs";
 
-// TODO;
 import multer from "multer";
 var diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {

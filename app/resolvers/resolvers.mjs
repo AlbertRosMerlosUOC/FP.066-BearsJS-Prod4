@@ -14,6 +14,7 @@ import {
   createTask,
   updateTask,
   updateTaskDay,
+  updateTaskFile,
   deleteTask, } from "../controllers/tasksController.mjs";
 
 // Crear el objeto resolvers
@@ -43,6 +44,8 @@ export const resolvers = {
     updateTask: updateTask,
     // Resolver para actualizar el día asignado para una tarea por _id
     updateTaskDay: updateTaskDay,
+    // Resolver para actualizar el día asignado para una tarea por _id
+    updateTaskFile: updateTaskFile,
     // Resolver para eliminar una tarea por _id
     deleteTask: deleteTask,
   },
@@ -70,6 +73,10 @@ export const resolvers = {
     // Subscription al modificar una tarea
     deletedTask: {
       subscribe: () => pubsub.asyncIterator(['DELETE_TASK']),
+    },
+    // Subscription al subir un archivo a una tarea
+    uploadedFile: {
+      subscribe: () => pubsub.asyncIterator(['ADD_FILE']),
     },
   },
 };

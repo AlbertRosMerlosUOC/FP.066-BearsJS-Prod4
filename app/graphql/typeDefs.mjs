@@ -24,6 +24,7 @@ export const typeDefs = gql`
     user: String
     in_day: String
     finished: Boolean!
+    file_name: String
   }
 
   type Query {
@@ -68,6 +69,7 @@ export const typeDefs = gql`
       user: String
       in_day: String
       finished: Boolean!
+      file_name: String
     ): Task
 
     updateTask(
@@ -84,6 +86,8 @@ export const typeDefs = gql`
 
     updateTaskDay(_id: ID!, in_day: String): Task
 
+    updateTaskFile(_id: ID!, file_name: String): Task
+
     deleteTask(_id: ID!): Task
   }
 
@@ -98,5 +102,6 @@ export const typeDefs = gql`
     addedTask: Actividad
     updatedTask: Actividad
     deletedTask: Actividad
+    uploadedFile: Actividad
   }
 `

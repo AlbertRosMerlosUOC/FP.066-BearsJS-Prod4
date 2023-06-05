@@ -116,6 +116,24 @@ wsClient.subscribe(
   }
 );
 
+wsClient.subscribe(
+  {
+    query: `subscription {
+      uploadedFile {
+        estado
+        mensaje
+    }
+  }`,
+  },
+  {
+    next: (res) => {
+      goLiveSubsToast(res.data.uploadedFile.mensaje);
+      console.log(res);
+    },
+    error: (e) => console.error(e),
+  }
+);
+
 // Seleccionar el formulario y los contenedores de la tarjetas
 const form = document.querySelector("#myForm");
 const modal = document.querySelector("#formTask");
@@ -129,6 +147,7 @@ const dropDay6 = document.getElementById("day6");
 const dropDay7 = document.getElementById("day7");
 
 const targetCard = document.getElementById("target-card");
+const targetCardFile = document.getElementById("file-task-card");
 
 const fileForm = document.querySelector("#myFileForm");
 const fileModal = document.querySelector("#fileTask");
@@ -179,7 +198,8 @@ form.addEventListener("submit", (event) => {
           type: "${tTyp}",
           user: "${user}",
           in_day: "${inDay}",
-          finished: ${fini}
+          finished: ${fini},
+          file_name: "0"
         ) {
           _id
           name
@@ -190,6 +210,7 @@ form.addEventListener("submit", (event) => {
           user
           in_day
           finished
+          file_name
         }
       }
     `,
@@ -216,7 +237,9 @@ form.addEventListener("submit", (event) => {
 
       // Obtener el primer botón dentro del elemento "card"
       const editTask = card.querySelector(".button-editTask");
+      const fileTask = card.querySelector(".button-fileTask");
       const editCard = editTask.parentElement.parentElement;
+      const editFile = fileTask.parentElement.parentElement;
 
       // Agregar un controlador de eventos "click" al segundo botón
       editTask.addEventListener("click", () => {
@@ -232,6 +255,14 @@ form.addEventListener("submit", (event) => {
         document.getElementById("modal-add-save").style.display = "block";
         // Ocultamos el campo de añadir al día en la edición de la tarjeta
         document.querySelector(".div-add-into").style.display = "none";
+      });
+
+      // Agregar un controlador de eventos "click" al segundo botón
+      fileTask.addEventListener("click", () => {
+        // Reiniciamos el formulario
+        fileForm.reset();
+        // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
+        editFile.classList.add("editing");
       });
 
       // Obtener el segundo botón dentro del elemento "card"
@@ -452,19 +483,21 @@ saveTask.addEventListener("click", () => {
     <p class="fDesc">${desc}</p>
     <div class="buttonsDiv">
         <button type="button" class="btn btn-success xx-small button-editTask" data-bs-toggle="modal" data-bs-target="#formTask" task-id="${editingTask.id}"><i class="fa fa-edit fa-lg"></i></button>
-        <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask"><i class="fa fa-file-o fa-lg"></i></button>
+        <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${editingTask.id}"><i class="fa fa-file-o fa-lg"></i></button>
         <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete"><i class="fa fa-trash-o fa-lg"></i></button>
     </div>
   `;
 
   // Obtener el primer botón dentro del elemento "card"
   const editTask = editingTask.querySelector(".button-editTask");
+  const fileTask = editingTask.querySelector(".button-fileTask");
+  const editCard = editTask.parentElement.parentElement;
+  const editFile = fileTask.parentElement.parentElement;
   // Agregar un controlador de eventos "click" al segundo botón
   editTask.addEventListener("click", () => {
     // Reiniciamos el formulario
     form.reset();
     // Añadimos la información de la tarea al formulario
-    const editCard = editTask.parentElement.parentElement;
     llenarDatosTarea(editCard.id);
     // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
     editCard.classList.add("editing");
@@ -474,6 +507,14 @@ saveTask.addEventListener("click", () => {
     document.getElementById("modal-add-save").style.display = "block";
     // Ocultamos el campo de añadir al día en la edición de la tarjeta
     document.querySelector(".div-add-into").style.display = "none";
+  });
+
+  // Agregar un controlador de eventos "click" al segundo botón
+  fileTask.addEventListener("click", () => {
+    // Reiniciamos el formulario
+    fileForm.reset();
+    // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
+    editFile.classList.add("editing");
   });
 
   // Obtener el segundo botón dentro del elemento "card"
@@ -540,6 +581,7 @@ function writeCard(item) {
   const editTask = card.querySelector(".button-editTask");
   const fileTask = card.querySelector(".button-fileTask");
   const editCard = editTask.parentElement.parentElement;
+  const editFile = fileTask.parentElement.parentElement;
 
   // Agregar un controlador de eventos "click" al segundo botón
   editTask.addEventListener("click", () => {
@@ -560,10 +602,8 @@ function writeCard(item) {
   fileTask.addEventListener("click", () => {
     // Reiniciamos el formulario
     fileForm.reset();
-    document.querySelector("#file-task-card").value =
-      fileTask.getAttribute("task-id");
     // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
-    editCard.classList.add("editing");
+    editFile.classList.add("editing");
   });
 
   // Obtener el segundo botón dentro del elemento "card"
@@ -759,31 +799,56 @@ fileForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const myFile = e.currentTarget.myFile.files[0];
   let postData = new FormData();
+  let fileNamePost = "";
   postData.append("myFile", myFile);
 
   if (e.currentTarget.myFile.files.length > 0) {
     // Realiza la solicitud para subir el archivo
-    // PENDING fetch("http://localhost:5000", {
     fetch("http://localhost:3000/upload", {
       method: "POST",
       body: postData,
     })
-      .then((response) => {
-        console.log(response);
-        if (response.ok) {
-          // El archivo se ha subido correctamente
-          console.log("Response status:", response.status);
-          return response.json();
-        } else {
-          // Hubo un error al subir el archivo
-          throw new Error("Error al subir el archivo: " + response.json());
-        }
+    .then((response) => {
+      console.log(response);
+      if (response.ok) {
+        // El archivo se ha subido correctamente
+        console.log("Response status:", response.status);
+        return response.json();
+      } else {
+        // Hubo un error al subir el archivo
+        throw new Error("Error al subir el archivo: " + response.json());
+      }
+    })
+    .then((response) => response)
+    .then((data) => {
+      socket.emit("importFile", "Se ha subido correctamente un archivo.");
+      fileNamePost = data.filename;
+      // Recuperamos la tarjeta de la tarea que estamos editando mediante la clase "editing"
+      const editingTask = document.querySelector(".editing");
+      fetch("http://localhost:3000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+          mutation {
+            updateTaskFile(
+              _id: "${editingTask.id}",
+              file_name: "${fileNamePost}"
+            ) {
+              _id
+              file_name
+            }
+          }
+        `,
+        }),
       })
-      .then((response) => response)
-      .then((data) => {
-        console.log(data);
-        socket.emit("importFile", "Se ha subido correctamente un archivo.");
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("Nombre del archivo vinculado a la tarea.");
       });
+    });
   }
 
   // Limpiar los valores del formulario
