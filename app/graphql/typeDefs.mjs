@@ -1,4 +1,7 @@
-export const typeDefs = `#graphql
+import { gql } from 'apollo-server-express';
+
+// export const typeDefs = `#graphql
+export const typeDefs = gql`
   type Week {
     _id: ID!
     week: Int!

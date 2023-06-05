@@ -29,6 +29,39 @@ function goLiveFileToast() {
   }, 5000);
 }
 
+function goLiveSubsToast() {
+  var myToast = document.getElementById("subsToast");
+  var bsToast = new bootstrap.Toast(myToast);
+  bsToast.show();
+  setTimeout(function() {
+      bsToast.hide();
+  }, 5000);
+}
+
+const wsClient = graphqlWs.createClient({
+  url: 'ws://localhost:3000/graphql',
+  lazy: false,
+});
+
+wsClient.subscribe({
+  query: `subscription {
+    moveTask {
+        _id
+        name
+        description
+        in_day
+    }
+  }`
+}, {
+  next: (res) => {
+    // alertify.success(`Tarea movida por el usuario`);
+    goLiveSubsToast();
+      // alert('Se ha actualizado la tarea ');
+    console.log(res);
+  },
+  error: (e) => console.error(e),
+});
+
 // Seleccionar el formulario y los contenedores de la tarjetas
 const form = document.querySelector("#myForm");
 const modal = document.querySelector("#formTask");
@@ -191,7 +224,6 @@ form.addEventListener("submit", (event) => {
     function dragEnd() {
       // Restablecer el efecto de arrastrar
       this.classList.remove("dragging");
-      // TODO window.moveTarea(data, currentColumn, sessionUserName);
     }
   
     // Agregar la tarjeta al contenedor que toque según el día clickado
@@ -266,7 +298,6 @@ function drop(event) {
   
   var id_task = draggedElement.id;
   // Fetch para actualizar el día asignado a una tarea
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -336,7 +367,6 @@ saveTask.addEventListener("click", () => {
   const fini = document.querySelector("#finishedInput").checked ? true : false;
   
   // Fetch para actualizar una tarea
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -550,7 +580,6 @@ function writeCard(item) {
 // Elimina el elemento padre del elemento que se haya seleccionado
 function tareaEliminada(_id) {
   // Fetch para eliminar una tarea
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -578,7 +607,6 @@ function tareaEliminada(_id) {
 // Conexion al servidor GraphQl para la llamada getTasksByWeek(idWeek)
 // Se ejecutará siempre y cuando la semana no provenga del mockup (es decir, cuando venga de base de datos)
 if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no estamos en el producto 2, donde se podían crear semanas como mockup
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -604,7 +632,6 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
       res.data.getTasksByWeek.map((item) => writeCard(item));
     });
   
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -629,7 +656,6 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
 }
 
 function llenarDatosTarea(id) {
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -712,22 +738,3 @@ fileModal.addEventListener("hidden.bs.modal", function (event) {
   // Mostramos el campo de añadir al día
   document.querySelector(".div-add-into").style.display = "block";
 });
-
-const graphQLWsClient = window.graphQLWsClient = graphqlWs.createClient({
-  url: 'ws://localhost:3000/graphql',
-});
-
-// TODO
-const subscribeMoveTask = graphQLWsClient.subscribe(
-  {
-    query: 'subscription { moveTask { _id } }',
-  },
-  {
-    next: (args) => {
-      alertify.success(`Hola?`);
-      console.log('next', args)
-    },
-    error: (e) => console.log('error', e),
-    complete: () => console.log('complete'),
-  },
-);

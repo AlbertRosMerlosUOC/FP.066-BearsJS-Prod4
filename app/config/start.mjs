@@ -1,4 +1,5 @@
-import { ApolloServer } from '@apollo/server';
+// import { ApolloServer } from '@apollo/server';
+import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -12,6 +13,7 @@ import express from 'express';
 import http from 'http';
 
 import "./database.mjs";
+import { pubsub } from './pubsub.mjs';
 import { resolvers } from '../resolvers/resolvers.mjs';
 import { typeDefs } from '../graphql/typeDefs.mjs';
 
@@ -95,8 +97,14 @@ const server = new ApolloServer({
       },
     },
   ],
+  context: ({ req }) => {
+    const context = { req, pubsub };
+    context.io = io;
+    return context;
+  }
 });
 await server.start();
+server.applyMiddleware({ app });
 
 app.use(
   '/graphql',

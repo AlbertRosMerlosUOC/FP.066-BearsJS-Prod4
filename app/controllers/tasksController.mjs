@@ -1,9 +1,5 @@
 import Task from "../models/Task.mjs";
-// import pubsub from "../config/pubsub.mjs";
-const MOVE_TASK = "MOVE_TASK";
-import { PubSub } from 'graphql-subscriptions';
-
-const pubsub = new PubSub();
+import { pubsub } from "../config/pubsub.mjs";
 
 export const getTasks = async () => {
   return await Task.find().populate("_id_week");
@@ -70,14 +66,12 @@ export const updateTask = async (
 };
 
 export const updateTaskDay = async (root, args) => {
-  const task = await (Task.findById(args._id).exec());
+  const task = await Task.findById(args._id).exec();
   task.in_day = args.in_day || task.in_day;
-  try {
-    pubsub.publish(MOVE_TASK, { moveTask: task });
-  } catch (error) {
-    console.log(error);
-  }
-  return task.save();
+  const updatedTask = await task.save().then(() => {
+    pubsub.publish("MOVE_TASK", { moveTask: task });
+  });
+  return updatedTask;
 };
 
 export const deleteTask = async (_, { _id }) => {
