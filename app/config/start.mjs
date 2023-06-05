@@ -1,39 +1,39 @@
 // import { ApolloServer } from '@apollo/server';
-import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import { expressMiddleware } from '@apollo/server/express4';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { Server } from 'socket.io';
-import { useServer } from 'graphql-ws/lib/use/ws';
-import { WebSocketServer } from 'ws';
+import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { expressMiddleware } from "@apollo/server/express4";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { Server } from "socket.io";
+import { useServer } from "graphql-ws/lib/use/ws";
+import { WebSocketServer } from "ws";
 
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import express from 'express';
-import http from 'http';
+import bodyParser from "body-parser";
+import cors from "cors";
+import express from "express";
+import http from "http";
 
 import "./database.mjs";
-import { pubsub } from './pubsub.mjs';
-import { resolvers } from '../resolvers/resolvers.mjs';
-import { typeDefs } from '../graphql/typeDefs.mjs';
+import { pubsub } from "./pubsub.mjs";
+import { resolvers } from "../resolvers/resolvers.mjs";
+import { typeDefs } from "../graphql/typeDefs.mjs";
 
-// TODO
-// import { multer } from 'multer';
-// var diskStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "app/data/upload");
-//   },
-//   filename: function (req, file, cb) {
-//     const pre = Date.now() + "-" + Math.round(Math.random() * 1e4);
-//     cb(null, pre + "-" + file.originalname);
-//   },
-// });
-// var upload = multer({ storage: diskStorage });
+// TODO;
+import multer from "multer";
+var diskStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "app/data/upload");
+  },
+  filename: function (req, file, cb) {
+    const pre = Date.now() + "-" + Math.round(Math.random() * 1e4);
+    cb(null, pre + "-" + file.originalname);
+  },
+});
+var upload = multer({ storage: diskStorage });
 
 const app = express();
-      app.use(express.static("build"));
-      app.use(express.json());
-      app.use(express.urlencoded({ extended: true }));
+app.use(express.static("build"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer);
@@ -79,7 +79,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const wsServer = new WebSocketServer({
   server: httpServer,
-  path: '/graphql',
+  path: "/graphql",
 });
 const serverCleanup = useServer({ schema }, wsServer);
 
@@ -101,19 +101,24 @@ const server = new ApolloServer({
     const context = { req, pubsub };
     context.io = io;
     return context;
-  }
+  },
 });
 await server.start();
 server.applyMiddleware({ app });
 
-app.use(
-  '/graphql',
-  cors(),
-  bodyParser.json(),
-  expressMiddleware(server),
-);
+app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
 
-app.use('/', express.static('app/front/'));
+app.use("/", express.static("app/front/"));
+
+app.post("/upload", upload.single("myFile"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("Please upload a file");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(file);
+});
 
 await new Promise((resolve) => httpServer.listen({ port: 3000 }, resolve));
 console.log(`Servidor Web en funcionamiento en http://localhost:3000`);

@@ -1,12 +1,12 @@
 // Iniciamos el servicio de socket
 let socket = io();
 
-socket.on("showToast", (msg)=> {
+socket.on("showToast", (msg) => {
   console.log(msg);
   goLiveToast();
 });
 
-socket.on("fileToast", (msg)=> {
+socket.on("fileToast", (msg) => {
   console.log(msg);
   goLiveFileToast();
 });
@@ -15,8 +15,8 @@ function goLiveToast() {
   var myToast = document.getElementById("liveToast");
   var bsToast = new bootstrap.Toast(myToast);
   bsToast.show();
-  setTimeout(function() {
-      bsToast.hide();
+  setTimeout(function () {
+    bsToast.hide();
   }, 5000);
 }
 
@@ -24,8 +24,8 @@ function goLiveFileToast() {
   var myToast = document.getElementById("fileToast");
   var bsToast = new bootstrap.Toast(myToast);
   bsToast.show();
-  setTimeout(function() {
-      bsToast.hide();
+  setTimeout(function () {
+    bsToast.hide();
   }, 5000);
 }
 
@@ -34,75 +34,87 @@ function goLiveSubsToast(msj) {
   var bsToast = new bootstrap.Toast(myToast);
   document.querySelector("#subsText").innerHTML = msj;
   bsToast.show();
-  setTimeout(function() {
-      bsToast.hide();
+  setTimeout(function () {
+    bsToast.hide();
   }, 5000);
 }
 
 const wsClient = graphqlWs.createClient({
-  url: 'ws://localhost:3000/graphql',
+  url: "ws://localhost:3000/graphql",
   lazy: false,
 });
 
-wsClient.subscribe({
-  query: `subscription {
+wsClient.subscribe(
+  {
+    query: `subscription {
     movedTask {
       estado
       mensaje
     }
-  }`
-}, {
-  next: (res) => {
-    goLiveSubsToast(res.data.movedTask.mensaje);
-    console.log(res);
+  }`,
   },
-  error: (e) => console.error(e),
-});
+  {
+    next: (res) => {
+      goLiveSubsToast(res.data.movedTask.mensaje);
+      console.log(res);
+    },
+    error: (e) => console.error(e),
+  }
+);
 
-wsClient.subscribe({
-  query: `subscription {
+wsClient.subscribe(
+  {
+    query: `subscription {
     addedTask {
         estado
         mensaje
     }
-  }`
-}, {
-  next: (res) => {
-    goLiveSubsToast(res.data.addedTask.mensaje);
-    console.log(res);
+  }`,
   },
-  error: (e) => console.error(e),
-});
+  {
+    next: (res) => {
+      goLiveSubsToast(res.data.addedTask.mensaje);
+      console.log(res);
+    },
+    error: (e) => console.error(e),
+  }
+);
 
-wsClient.subscribe({
-  query: `subscription {
+wsClient.subscribe(
+  {
+    query: `subscription {
     updatedTask {
         estado
         mensaje
     }
-  }`
-}, {
-  next: (res) => {
-    goLiveSubsToast(res.data.updatedTask.mensaje);
-    console.log(res);
+  }`,
   },
-  error: (e) => console.error(e),
-});
+  {
+    next: (res) => {
+      goLiveSubsToast(res.data.updatedTask.mensaje);
+      console.log(res);
+    },
+    error: (e) => console.error(e),
+  }
+);
 
-wsClient.subscribe({
-  query: `subscription {
+wsClient.subscribe(
+  {
+    query: `subscription {
     deletedTask {
         estado
         mensaje
     }
-  }`
-}, {
-  next: (res) => {
-    goLiveSubsToast(res.data.deletedTask.mensaje);
-    console.log(res);
+  }`,
   },
-  error: (e) => console.error(e),
-});
+  {
+    next: (res) => {
+      goLiveSubsToast(res.data.deletedTask.mensaje);
+      console.log(res);
+    },
+    error: (e) => console.error(e),
+  }
+);
 
 // Seleccionar el formulario y los contenedores de la tarjetas
 const form = document.querySelector("#myForm");
@@ -122,15 +134,15 @@ const fileForm = document.querySelector("#myFileForm");
 const fileModal = document.querySelector("#fileTask");
 
 // Agregar controladores de eventos para eventos de arrastrar y soltar
-let items = document.querySelectorAll('.taskContainer');
-    items.forEach(function(item) {
-      // item.addEventListener('dragstart', handleDragStart);
-      item.addEventListener('dragover', dragOver);
-      // item.addEventListener('dragenter', handleDragEnter);
-      // item.addEventListener('dragleave', handleDragLeave);
-      // item.addEventListener('dragend', handleDragEnd);
-      item.addEventListener('drop', drop);
-    });
+let items = document.querySelectorAll(".taskContainer");
+items.forEach(function (item) {
+  // item.addEventListener('dragstart', handleDragStart);
+  item.addEventListener("dragover", dragOver);
+  // item.addEventListener('dragenter', handleDragEnter);
+  // item.addEventListener('dragleave', handleDragLeave);
+  // item.addEventListener('dragend', handleDragEnd);
+  item.addEventListener("drop", drop);
+});
 
 // Agregar un escuchador de evento "SUBMIT" para el formulario
 form.addEventListener("submit", (event) => {
@@ -183,16 +195,16 @@ form.addEventListener("submit", (event) => {
     `,
     }),
   })
-  .then((res) => res.json())
-  .then((res) => {
-    _id = res.data.createTask._id;
-    socket.emit("createTask", "Se ha creado una nueva tarea.");
-    // Crear un nuevo elemento HTML para la tarjeta
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.classList.add("cardTask");
-    card.id = _id;
-    card.innerHTML = `
+    .then((res) => res.json())
+    .then((res) => {
+      _id = res.data.createTask._id;
+      socket.emit("createTask", "Se ha creado una nueva tarea.");
+      // Crear un nuevo elemento HTML para la tarjeta
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.classList.add("cardTask");
+      card.id = _id;
+      card.innerHTML = `
       <p class="fName"><b>${name}</b></p>
       <p class="fDesc">${desc}</p>
       <div class="buttonsDiv">
@@ -201,98 +213,98 @@ form.addEventListener("submit", (event) => {
         <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete"><i class="fa fa-trash-o fa-lg"></i></button>
       </div>
     `;
-  
-    // Obtener el primer botón dentro del elemento "card"
-    const editTask = card.querySelector(".button-editTask");
-    const editCard = editTask.parentElement.parentElement;
-  
-    // Agregar un controlador de eventos "click" al segundo botón
-    editTask.addEventListener("click", () => {
-      // Reiniciamos el formulario
-      form.reset();
-      // Añadimos la información de la tarea al formulario
-      llenarDatosTarea(_id);
-      // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
-      editCard.classList.add("editing");
-      // Ocultamos el botón de crear tarea
-      document.getElementById("modal-add-create").style.display = "none";
-      // Mostramos el botón de guardar cambios (para editar la tarea)
-      document.getElementById("modal-add-save").style.display = "block";
-      // Ocultamos el campo de añadir al día en la edición de la tarjeta
-      document.querySelector(".div-add-into").style.display = "none";
-    });
-  
-    // Obtener el segundo botón dentro del elemento "card"
-    const deleteTask = card.querySelector(".button-deleteTask");
-  
-    // Agregar un controlador de eventos "click" al segundo botón
-    deleteTask.addEventListener("click", () => {
-      // Obtener el elemento "div" que contiene el botón y eliminarlo
-      const dropUnassigned = deleteTask.parentElement.parentElement;
-  
-      const modalDelete = document.querySelector("#myModalDelete");
-      const modalInstance = bootstrap.Modal.getInstance(modalDelete);
-      modalInstance.show();
-  
-      // Funcionalidad de quitar tarjeta (elimina tarjeta)
-      const deleteCard = document.querySelector("#deleteCard");
-      deleteCard.addEventListener("click", () => {
-        modalInstance.hide();
-        if (card.parentNode) {
-          dropUnassigned.remove();
-          tareaEliminada(_id);
-        }
+
+      // Obtener el primer botón dentro del elemento "card"
+      const editTask = card.querySelector(".button-editTask");
+      const editCard = editTask.parentElement.parentElement;
+
+      // Agregar un controlador de eventos "click" al segundo botón
+      editTask.addEventListener("click", () => {
+        // Reiniciamos el formulario
+        form.reset();
+        // Añadimos la información de la tarea al formulario
+        llenarDatosTarea(_id);
+        // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
+        editCard.classList.add("editing");
+        // Ocultamos el botón de crear tarea
+        document.getElementById("modal-add-create").style.display = "none";
+        // Mostramos el botón de guardar cambios (para editar la tarea)
+        document.getElementById("modal-add-save").style.display = "block";
+        // Ocultamos el campo de añadir al día en la edición de la tarjeta
+        document.querySelector(".div-add-into").style.display = "none";
       });
+
+      // Obtener el segundo botón dentro del elemento "card"
+      const deleteTask = card.querySelector(".button-deleteTask");
+
+      // Agregar un controlador de eventos "click" al segundo botón
+      deleteTask.addEventListener("click", () => {
+        // Obtener el elemento "div" que contiene el botón y eliminarlo
+        const dropUnassigned = deleteTask.parentElement.parentElement;
+
+        const modalDelete = document.querySelector("#myModalDelete");
+        const modalInstance = bootstrap.Modal.getInstance(modalDelete);
+        modalInstance.show();
+
+        // Funcionalidad de quitar tarjeta (elimina tarjeta)
+        const deleteCard = document.querySelector("#deleteCard");
+        deleteCard.addEventListener("click", () => {
+          modalInstance.hide();
+          if (card.parentNode) {
+            dropUnassigned.remove();
+            tareaEliminada(_id);
+          }
+        });
+      });
+
+      // Agregar atributo "draggable" al elemento "card"
+      card.setAttribute("draggable", true);
+
+      // Agregar controladores de eventos para eventos de arrastrar y soltar
+      card.addEventListener("dragstart", dragStart);
+      card.addEventListener("dragend", dragEnd);
+
+      function dragStart() {
+        // Establecer el efecto de arrastrar
+        this.classList.add("dragging");
+        this.classList.add("editing");
+      }
+
+      function dragEnd() {
+        // Restablecer el efecto de arrastrar
+        this.classList.remove("dragging");
+        this.classList.remove("editing");
+      }
+
+      // Agregar la tarjeta al contenedor que toque según el día clickado
+      var tC = document.getElementById("target-card").value;
+
+      if (tC == "1" || inDay == "L") {
+        dropDay1.appendChild(card);
+      } else if (tC == "2" || inDay == "M") {
+        dropDay2.appendChild(card);
+      } else if (tC == "3" || inDay == "X") {
+        dropDay3.appendChild(card);
+      } else if (tC == "4" || inDay == "J") {
+        dropDay4.appendChild(card);
+      } else if (tC == "5" || inDay == "V") {
+        dropDay5.appendChild(card);
+      } else if (tC == "6" || inDay == "S") {
+        dropDay6.appendChild(card);
+      } else if (tC == "7" || inDay == "D") {
+        dropDay7.appendChild(card);
+      } else {
+        dropUnassigned.appendChild(card);
+      }
+
+      // Limpiar los valores del formulario
+      form.reset();
+
+      // Cerrar el modal después de agregar la tarjeta
+      const modal = document.querySelector("#formTask");
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+      modalInstance.hide();
     });
-  
-    // Agregar atributo "draggable" al elemento "card"
-    card.setAttribute("draggable", true);
-  
-    // Agregar controladores de eventos para eventos de arrastrar y soltar
-    card.addEventListener("dragstart", dragStart);
-    card.addEventListener("dragend", dragEnd);
-  
-    function dragStart() {
-      // Establecer el efecto de arrastrar
-      this.classList.add("dragging");
-      this.classList.add("editing");
-    }
-  
-    function dragEnd() {
-      // Restablecer el efecto de arrastrar
-      this.classList.remove("dragging");
-      this.classList.remove("editing");
-    }
-  
-    // Agregar la tarjeta al contenedor que toque según el día clickado
-    var tC = document.getElementById("target-card").value;
-  
-    if (tC == "1" || inDay == "L") {
-      dropDay1.appendChild(card);
-    } else if (tC == "2" || inDay == "M") {
-      dropDay2.appendChild(card);
-    } else if (tC == "3" || inDay == "X") {
-      dropDay3.appendChild(card);
-    } else if (tC == "4" || inDay == "J") {
-      dropDay4.appendChild(card);
-    } else if (tC == "5" || inDay == "V") {
-      dropDay5.appendChild(card);
-    } else if (tC == "6" || inDay == "S") {
-      dropDay6.appendChild(card);
-    } else if (tC == "7" || inDay == "D") {
-      dropDay7.appendChild(card);
-    } else {
-      dropUnassigned.appendChild(card);
-    }
-  
-    // Limpiar los valores del formulario
-    form.reset();
-  
-    // Cerrar el modal después de agregar la tarjeta
-    const modal = document.querySelector("#formTask");
-    const modalInstance = bootstrap.Modal.getInstance(modal);
-    modalInstance.hide();
-  });
 });
 
 function dragOver(event) {
@@ -333,7 +345,7 @@ function drop(event) {
   } else {
     dropUnassigned.appendChild(draggedElement);
   }
-  
+
   var id_task = draggedElement.id;
   // Fetch para actualizar el día asignado a una tarea
   fetch("http://localhost:3000/graphql", {
@@ -403,7 +415,7 @@ saveTask.addEventListener("click", () => {
   const user = document.querySelector("#userInput").value;
   const days = document.querySelector("#inDay").value;
   const fini = document.querySelector("#finishedInput").checked ? true : false;
-  
+
   // Fetch para actualizar una tarea
   fetch("http://localhost:3000/graphql", {
     method: "POST",
@@ -548,7 +560,8 @@ function writeCard(item) {
   fileTask.addEventListener("click", () => {
     // Reiniciamos el formulario
     fileForm.reset();
-    document.querySelector("#file-task-card").value = fileTask.getAttribute("task-id");
+    document.querySelector("#file-task-card").value =
+      fileTask.getAttribute("task-id");
     // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
     editCard.classList.add("editing");
   });
@@ -615,7 +628,7 @@ function writeCard(item) {
   } else {
     dropUnassigned.appendChild(card);
   }
-};
+}
 
 // Elimina el elemento padre del elemento que se haya seleccionado
 function tareaEliminada(_id) {
@@ -643,10 +656,11 @@ function tareaEliminada(_id) {
     });
 }
 
-// Carga de datos inicial con conexión a MongoDB. 
+// Carga de datos inicial con conexión a MongoDB.
 // Conexion al servidor GraphQl para la llamada getTasksByWeek(idWeek)
 // Se ejecutará siempre y cuando la semana no provenga del mockup (es decir, cuando venga de base de datos)
-if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no estamos en el producto 2, donde se podían crear semanas como mockup
+if (!idWeek.includes("mockup-")) {
+  // Este if no se aplicará nunca porque ya no estamos en el producto 2, donde se podían crear semanas como mockup
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -667,11 +681,12 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
         }
       }`,
     }),
-  }).then((res) => res.json())
+  })
+    .then((res) => res.json())
     .then((res) => {
       res.data.getTasksByWeek.map((item) => writeCard(item));
     });
-  
+
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -686,9 +701,14 @@ if (!idWeek.includes("mockup-")) { // Este if no se aplicará nunca porque ya no
         }
       }`,
     }),
-  }).then((res) => res.json())
+  })
+    .then((res) => res.json())
     .then((res) => {
-      document.querySelector("#breadcrumb-current").innerHTML = "Semana " + res.data.getWeekById.week + " del año " + res.data.getWeekById.year;
+      document.querySelector("#breadcrumb-current").innerHTML =
+        "Semana " +
+        res.data.getWeekById.week +
+        " del año " +
+        res.data.getWeekById.year;
     });
 } else {
   var text = idWeek.replace("mockup-", "").replace("-", " del año ");
@@ -716,18 +736,23 @@ function llenarDatosTarea(id) {
         }
       }`,
     }),
-  }).then((res) => res.json())
+  })
+    .then((res) => res.json())
     .then((res) => {
-    // Añadimos la información de la tarea al formulario
-    document.querySelector("#nameInput").value = res.data.getTaskById.name;
-    document.querySelector("#descInput").value = res.data.getTaskById.description;
-    document.querySelector("#iniInput").value = res.data.getTaskById.hour_ini;
-    document.querySelector("#endInput").value = res.data.getTaskById.hour_end;
-    document.querySelector('input[name="taskType"][value="' + res.data.getTaskById.type + '"]').checked = "true";
-    document.querySelector("#userInput").value = res.data.getTaskById.user;
-    document.querySelector("#inDay").value = res.data.getTaskById.in_day;
-    document.querySelector("#finishedInput").checked =  res.data.getTaskById.finished;;
-  });
+      // Añadimos la información de la tarea al formulario
+      document.querySelector("#nameInput").value = res.data.getTaskById.name;
+      document.querySelector("#descInput").value =
+        res.data.getTaskById.description;
+      document.querySelector("#iniInput").value = res.data.getTaskById.hour_ini;
+      document.querySelector("#endInput").value = res.data.getTaskById.hour_end;
+      document.querySelector(
+        'input[name="taskType"][value="' + res.data.getTaskById.type + '"]'
+      ).checked = "true";
+      document.querySelector("#userInput").value = res.data.getTaskById.user;
+      document.querySelector("#inDay").value = res.data.getTaskById.in_day;
+      document.querySelector("#finishedInput").checked =
+        res.data.getTaskById.finished;
+    });
 }
 
 fileForm.addEventListener("submit", (e) => {
@@ -740,26 +765,27 @@ fileForm.addEventListener("submit", (e) => {
     // Realiza la solicitud para subir el archivo
     // PENDING fetch("http://localhost:5000", {
     fetch("http://localhost:3000/upload", {
-      method: 'POST',
-      body: postData
+      method: "POST",
+      body: postData,
     })
-    .then(response => {
-      console.log(response);
-      if (response.ok) {
-        // El archivo se ha subido correctamente
-        console.log("Response status:", response.status);
-        return response.json();
-      } else {
-        // Hubo un error al subir el archivo
-        throw new Error('Error al subir el archivo: ' + response.json());
-      }
-    })
-    .then(response => response)
-    .then(data => {
-      socket.emit("importFile", "Se ha subido correctamente un archivo.");
-    })
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          // El archivo se ha subido correctamente
+          console.log("Response status:", response.status);
+          return response.json();
+        } else {
+          // Hubo un error al subir el archivo
+          throw new Error("Error al subir el archivo: " + response.json());
+        }
+      })
+      .then((response) => response)
+      .then((data) => {
+        console.log(data);
+        socket.emit("importFile", "Se ha subido correctamente un archivo.");
+      });
   }
-  
+
   // Limpiar los valores del formulario
   fileForm.reset();
 
