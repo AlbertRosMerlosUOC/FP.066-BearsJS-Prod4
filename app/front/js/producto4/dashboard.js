@@ -29,9 +29,10 @@ function goLiveFileToast() {
   }, 5000);
 }
 
-function goLiveSubsToast() {
+function goLiveSubsToast(msj) {
   var myToast = document.getElementById("subsToast");
   var bsToast = new bootstrap.Toast(myToast);
+  document.querySelector("#subsText").innerHTML = msj;
   bsToast.show();
   setTimeout(function() {
       bsToast.hide();
@@ -45,18 +46,59 @@ const wsClient = graphqlWs.createClient({
 
 wsClient.subscribe({
   query: `subscription {
-    moveTask {
-        _id
-        name
-        description
-        in_day
+    movedTask {
+      estado
+      mensaje
     }
   }`
 }, {
   next: (res) => {
-    // alertify.success(`Tarea movida por el usuario`);
-    goLiveSubsToast();
-      // alert('Se ha actualizado la tarea ');
+    goLiveSubsToast(res.data.movedTask.mensaje);
+    console.log(res);
+  },
+  error: (e) => console.error(e),
+});
+
+wsClient.subscribe({
+  query: `subscription {
+    addedTask {
+        estado
+        mensaje
+    }
+  }`
+}, {
+  next: (res) => {
+    goLiveSubsToast(res.data.addedTask.mensaje);
+    console.log(res);
+  },
+  error: (e) => console.error(e),
+});
+
+wsClient.subscribe({
+  query: `subscription {
+    updatedTask {
+        estado
+        mensaje
+    }
+  }`
+}, {
+  next: (res) => {
+    goLiveSubsToast(res.data.updatedTask.mensaje);
+    console.log(res);
+  },
+  error: (e) => console.error(e),
+});
+
+wsClient.subscribe({
+  query: `subscription {
+    deletedTask {
+        estado
+        mensaje
+    }
+  }`
+}, {
+  next: (res) => {
+    goLiveSubsToast(res.data.deletedTask.mensaje);
     console.log(res);
   },
   error: (e) => console.error(e),

@@ -87,8 +87,16 @@ export const typeDefs = gql`
     deleteTask(_id: ID!): Task
   }
 
+  type Actividad {
+    estado: String
+    mensaje: String
+  }
+
   type Subscription {
     hello: String
-    moveTask: Task
+    movedTask: Actividad
+    addedTask: Actividad
+    updatedTask: Actividad
+    deletedTask: Actividad
   }
 `

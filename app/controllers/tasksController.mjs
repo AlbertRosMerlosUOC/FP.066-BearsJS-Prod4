@@ -39,7 +39,9 @@ export const createTask = async (
     in_day,
     finished,
   });
-  // pubsub.publish("createTask", { newTask });
+  let estado = "success";
+  let mensaje = "Un usuario ha creado una nueva tarea con nombre '<i>" + name + "</i>'. Actualice la página para ver los cambios.";
+  pubsub.publish("ADD_TASK", { addedTask: { estado, mensaje } });
   return await newTask.save();
 };
 
@@ -61,7 +63,9 @@ export const updateTask = async (
     },
     { new: true }
   ).exec();
-  // pubsub.publish("updateTask", { updatedTask });
+  let estado = "success";
+  let mensaje = "Un usuario realizado modificaciones en la tarea '<i>" + name + "</i>'. Actualice la página para ver los cambios.";
+  pubsub.publish("EDIT_TASK", { updatedTask: { estado, mensaje } });
   return updatedTask;
 };
 
@@ -69,7 +73,9 @@ export const updateTaskDay = async (root, args) => {
   const task = await Task.findById(args._id).exec();
   task.in_day = args.in_day || task.in_day;
   const updatedTask = await task.save().then(() => {
-    pubsub.publish("MOVE_TASK", { moveTask: task });
+    let estado = "success";
+    let mensaje = "Un usuario ha movido la tarea '<i>" + task.name + "</i>' a otro día de la semana. Actualice la página para ver los cambios.";
+    pubsub.publish("MOVE_TASK", { movedTask: { estado, mensaje } });
   });
   return updatedTask;
 };
@@ -78,6 +84,8 @@ export const deleteTask = async (_, { _id }) => {
   const deletedTask = await Task.findByIdAndDelete(_id)
     .populate("_id_week")
     .exec();
-  // pubsub.publish("deleteTask", { deletedTask });
+    let estado = "success";
+    let mensaje = "Un usuario ha eliminado la tarea '<i>" + deletedTask.name + "</i>'. Actualice la página para ver los cambios.";
+    pubsub.publish("DELETE_TASK", { deletedTask: { estado, mensaje } });
   return deletedTask;
 };

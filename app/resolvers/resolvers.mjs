@@ -55,9 +55,21 @@ export const resolvers = {
         }
       },
     },
-    // Subscription para mover una tarea
-    moveTask: {
+    // Subscription al mover una tarea
+    movedTask: {
       subscribe: () => pubsub.asyncIterator(['MOVE_TASK']),
+    },
+    // Subscription al modificar una tarea
+    addedTask: {
+      subscribe: () => pubsub.asyncIterator(['ADD_TASK']),
+    },
+    // Subscription al modificar una tarea
+    updatedTask: {
+      subscribe: () => pubsub.asyncIterator(['EDIT_TASK']),
+    },
+    // Subscription al modificar una tarea
+    deletedTask: {
+      subscribe: () => pubsub.asyncIterator(['DELETE_TASK']),
     },
   },
 };
