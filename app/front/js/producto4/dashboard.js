@@ -115,28 +115,22 @@ const dropDay4 = document.getElementById("day4");
 const dropDay5 = document.getElementById("day5");
 const dropDay6 = document.getElementById("day6");
 const dropDay7 = document.getElementById("day7");
+
 const targetCard = document.getElementById("target-card");
 
 const fileForm = document.querySelector("#myFileForm");
 const fileModal = document.querySelector("#fileTask");
 
 // Agregar controladores de eventos para eventos de arrastrar y soltar
-dropUnassigned.addEventListener("dragover", dragOver);
-dropUnassigned.addEventListener("drop", drop);
-dropDay1.addEventListener("dragover", dragOver);
-dropDay1.addEventListener("drop", drop);
-dropDay2.addEventListener("dragover", dragOver);
-dropDay2.addEventListener("drop", drop);
-dropDay3.addEventListener("dragover", dragOver);
-dropDay3.addEventListener("drop", drop);
-dropDay4.addEventListener("dragover", dragOver);
-dropDay4.addEventListener("drop", drop);
-dropDay5.addEventListener("dragover", dragOver);
-dropDay5.addEventListener("drop", drop);
-dropDay6.addEventListener("dragover", dragOver);
-dropDay6.addEventListener("drop", drop);
-dropDay7.addEventListener("dragover", dragOver);
-dropDay7.addEventListener("drop", drop);
+let items = document.querySelectorAll('.taskContainer');
+    items.forEach(function(item) {
+      // item.addEventListener('dragstart', handleDragStart);
+      item.addEventListener('dragover', dragOver);
+      // item.addEventListener('dragenter', handleDragEnter);
+      // item.addEventListener('dragleave', handleDragLeave);
+      // item.addEventListener('dragend', handleDragEnd);
+      item.addEventListener('drop', drop);
+    });
 
 // Agregar un escuchador de evento "SUBMIT" para el formulario
 form.addEventListener("submit", (event) => {
@@ -261,11 +255,13 @@ form.addEventListener("submit", (event) => {
     function dragStart() {
       // Establecer el efecto de arrastrar
       this.classList.add("dragging");
+      this.classList.add("editing");
     }
   
     function dragEnd() {
       // Restablecer el efecto de arrastrar
       this.classList.remove("dragging");
+      this.classList.remove("editing");
     }
   
     // Agregar la tarjeta al contenedor que toque según el día clickado
@@ -590,11 +586,13 @@ function writeCard(item) {
   function dragStart() {
     // Establecer el efecto de arrastrar
     this.classList.add("dragging");
+    this.classList.add("editing");
   }
 
   function dragEnd() {
     // Restablecer el efecto de arrastrar
     this.classList.remove("dragging");
+    this.classList.remove("editing");
   }
 
   // Agregar la tarjeta al contenedor que toque según el día clickado
