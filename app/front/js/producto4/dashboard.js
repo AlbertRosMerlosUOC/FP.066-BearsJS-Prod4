@@ -151,6 +151,9 @@ const targetCardFile = document.getElementById("file-task-card");
 
 const fileForm = document.querySelector("#myFileForm");
 const fileModal = document.querySelector("#fileTask");
+const fileLink = document.querySelector("#file-target-a");
+const fileBodyInput = document.querySelector("#file-body-input");
+const fileBodyDwnld = document.querySelector("#file-body-download");
 
 // Agregar controladores de eventos para eventos de arrastrar y soltar
 let items = document.querySelectorAll(".taskContainer");
@@ -180,7 +183,6 @@ form.addEventListener("submit", (event) => {
   var _id = "";
 
   // Fetch para crear una semana
-  // PENDING fetch("http://localhost:5000", {
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
@@ -199,7 +201,7 @@ form.addEventListener("submit", (event) => {
           user: "${user}",
           in_day: "${inDay}",
           finished: ${fini},
-          file_name: "0"
+          file_name: ""
         ) {
           _id
           name
@@ -230,7 +232,7 @@ form.addEventListener("submit", (event) => {
       <p class="fDesc">${desc}</p>
       <div class="buttonsDiv">
         <button type="button" class="btn btn-success xx-small button-editTask" data-bs-toggle="modal" data-bs-target="#formTask" task-id="${_id}"><i class="fa fa-edit fa-lg"></i></button>
-        <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${_id}"><i class="fa fa-file-o fa-lg"></i></button>
+        <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${_id}" file-target=""><i class="fa fa-file-o fa-lg"></i></button>
         <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete"><i class="fa fa-trash-o fa-lg"></i></button>
       </div>
     `;
@@ -263,6 +265,15 @@ form.addEventListener("submit", (event) => {
         fileForm.reset();
         // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
         editFile.classList.add("editing");
+        if (fileTask.getAttribute("file-target") !== "" && fileTask.getAttribute("file-target") !== "null") {
+          fileLink.setAttribute("href", "/" + fileTask.getAttribute("file-target"));
+          fileBodyDwnld.style.display = "block";
+          fileBodyInput.style.display = "none";
+        } else {
+          fileLink.setAttribute("href", "");
+          fileBodyDwnld.style.display = "none";
+          fileBodyInput.style.display = "block";
+        }
       });
 
       // Obtener el segundo botón dentro del elemento "card"
@@ -468,6 +479,7 @@ saveTask.addEventListener("click", () => {
           finished: ${fini}
         ) {
           _id
+          file_name
         }
       }
     `,
@@ -476,17 +488,17 @@ saveTask.addEventListener("click", () => {
     .then((res) => res.json())
     .then((res) => {
       socket.emit("updateTask", "Se ha modificado una tarea.");
-    });
 
-  editingTask.innerHTML = `
-    <p class="fName"><b>${name}</b></p>
-    <p class="fDesc">${desc}</p>
-    <div class="buttonsDiv">
-        <button type="button" class="btn btn-success xx-small button-editTask" data-bs-toggle="modal" data-bs-target="#formTask" task-id="${editingTask.id}"><i class="fa fa-edit fa-lg"></i></button>
-        <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${editingTask.id}"><i class="fa fa-file-o fa-lg"></i></button>
-        <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete"><i class="fa fa-trash-o fa-lg"></i></button>
-    </div>
-  `;
+      editingTask.innerHTML = `
+        <p class="fName"><b>${name}</b></p>
+        <p class="fDesc">${desc}</p>
+        <div class="buttonsDiv">
+            <button type="button" class="btn btn-success xx-small button-editTask" data-bs-toggle="modal" data-bs-target="#formTask" task-id="${editingTask.id}"><i class="fa fa-edit fa-lg"></i></button>
+            <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${editingTask.id}" file-target="${res.updatedTask.file_name}"><i class="fa fa-file-o fa-lg"></i></button>
+            <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete"><i class="fa fa-trash-o fa-lg"></i></button>
+        </div>
+      `;
+    });
 
   // Obtener el primer botón dentro del elemento "card"
   const editTask = editingTask.querySelector(".button-editTask");
@@ -515,6 +527,15 @@ saveTask.addEventListener("click", () => {
     fileForm.reset();
     // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
     editFile.classList.add("editing");
+    if (fileTask.getAttribute("file-target") !== "" && fileTask.getAttribute("file-target") !== "null") {
+      fileLink.setAttribute("href", "/" + fileTask.getAttribute("file-target"));
+      fileBodyDwnld.style.display = "block";
+      fileBodyInput.style.display = "none";
+    } else {
+      fileLink.setAttribute("href", "");
+      fileBodyDwnld.style.display = "none";
+      fileBodyInput.style.display = "block";
+    }
   });
 
   // Obtener el segundo botón dentro del elemento "card"
@@ -572,7 +593,7 @@ function writeCard(item) {
     <p class="fDesc">${item.description}</p>
     <div class="buttonsDiv">
       <button type="button" class="btn btn-success xx-small button-editTask" data-bs-toggle="modal" data-bs-target="#formTask" task-id="${item._id}"><i class="fa fa-edit fa-lg"></i></button>
-      <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${item._id}"><i class="fa fa-file-o fa-lg"></i></button>
+      <button type="button" class="btn btn-info xx-small button-fileTask" data-bs-toggle="modal" data-bs-target="#fileTask" task-id="${item._id}" file-target="${item.file_name}"><i class="fa fa-file-o fa-lg"></i></button>
       <button type="button" class="btn btn-danger xx-small button-deleteTask" data-bs-toggle="modal" data-bs-target="#myModalDelete" task-id="${item._id}"><i class="fa fa-trash-o fa-lg"></i></button>
     </div>
   `;
@@ -604,6 +625,15 @@ function writeCard(item) {
     fileForm.reset();
     // Añadimos una clase a la tarjeta que estamos editando para poder actualizarla después
     editFile.classList.add("editing");
+    if (fileTask.getAttribute("file-target") !== "" && fileTask.getAttribute("file-target") !== "null") {
+      fileLink.setAttribute("href", "/" + fileTask.getAttribute("file-target"));
+      fileBodyDwnld.style.display = "block";
+      fileBodyInput.style.display = "none";
+    } else {
+      fileLink.setAttribute("href", "");
+      fileBodyDwnld.style.display = "none";
+      fileBodyInput.style.display = "block";
+    }
   });
 
   // Obtener el segundo botón dentro del elemento "card"
@@ -718,6 +748,7 @@ if (!idWeek.includes("mockup-")) {
           user
           in_day
           finished
+          file_name
         }
       }`,
     }),
@@ -825,6 +856,7 @@ fileForm.addEventListener("submit", (e) => {
       fileNamePost = data.filename;
       // Recuperamos la tarjeta de la tarea que estamos editando mediante la clase "editing"
       const editingTask = document.querySelector(".editing");
+      const buttonFileTask = editingTask.querySelector(".button-fileTask");
       fetch("http://localhost:3000/graphql", {
         method: "POST",
         headers: {
@@ -847,6 +879,7 @@ fileForm.addEventListener("submit", (e) => {
       .then((res) => res.json())
       .then((res) => {
         console.log("Nombre del archivo vinculado a la tarea.");
+        buttonFileTask.setAttribute("file-target", fileNamePost);
       });
     });
   }

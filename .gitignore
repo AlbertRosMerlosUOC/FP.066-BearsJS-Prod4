@@ -172,4 +172,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-app/data/upload/
+# Carpeta donde se cargan los archivos de las tareas
+app/data/upload/*

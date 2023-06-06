@@ -106,8 +106,8 @@ await server.start();
 server.applyMiddleware({ app });
 
 app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
-
 app.use("/", express.static("app/front/"));
+app.use(express.static('app/data/upload'));
 
 app.post("/upload", upload.single("myFile"), (req, res, next) => {
   const file = req.file;

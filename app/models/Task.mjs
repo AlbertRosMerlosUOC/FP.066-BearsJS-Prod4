@@ -15,12 +15,6 @@ const taskSchema = new mongoose.Schema({
   in_day: String,
   finished: { type: Boolean, required: true },
   file_name: String
-  /*, TODO
-  file: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "File",
-    required: false,
-  }*/
 });
 
 const Task = mongoose.model("Task", taskSchema);
